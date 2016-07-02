@@ -11,7 +11,6 @@
 
 from SublimeLinter.lint import NodeLinter, util
 
-
 class Stylelint(NodeLinter):
     """Provides an interface to stylelint."""
 
@@ -24,6 +23,9 @@ class Stylelint(NodeLinter):
     regex = (
         r'^\s*(?P<line>[0-9]+)\:(?P<col>[0-9]+)\s*(?:(?P<error>✖)|(?P<warning>⚠))\s*(?P<message>.+)'
     )
+    selectors = {
+        'css': 'source.css.embedded.html'
+    }
 
     def cmd(self):
         """Return a tuple with the command line to execute."""
@@ -37,4 +39,9 @@ class Stylelint(NodeLinter):
                 path = result[1]
 
         command = [path]
+
+        if self.syntax == 'scss' or self.syntax == 'sass':
+            command.append('--syntax')
+            command.append('scss')
+
         return command
